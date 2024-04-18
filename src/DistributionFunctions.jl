@@ -10,9 +10,11 @@ using OrbitalElements             # potentials, resonances
 # Exports
 #####################################
 export DistributionFunction
-export PlummerDistributionFunction,IsotropicPlummer,OsipkovMerrittPlummer
-
 export F,ndFdJ
+
+export PlummerDistributionFunction,IsotropicPlummer,OsipkovMerrittPlummer
+export IsochroneDistributionFunction,IsotropicIsochrone,OsipkovMerrittIsochrone
+
 export dfscale
 
 #####################################

@@ -37,6 +37,6 @@ end
 #####################################
 # Include analytic distribution functions
 #####################################
-#include("../Analytic/Isochrone/isochrone.jl")
+include("../Analytic/Isochrone/isochrone.jl")
 include("../Analytic/Plummer/plummer.jl")
 #include("../Analytic/MestelZang/mestelzang.jl")
