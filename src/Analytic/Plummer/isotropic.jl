@@ -54,7 +54,7 @@ function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance
     dFdE = dFdE(E,df)
 
     # Value of n.dF/dJ
-    result = ndotOmega*dFdE
+    result = ndotΩ*dFdE
 
     return result
 end
