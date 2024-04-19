@@ -1,0 +1,29 @@
+name: CI
+on:
+  - push
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: 1.9
+          arch: x64
+      - name: instantiate environment
+        run: |
+            pwd
+            julia --project=df -e '
+              using Pkg
+              Pkg.add("BenchmarkTools")
+              Pkg.add("Test")
+              Pkg.add(url="https://github.com/JuliaStellarDynamics/OrbitalElements.jl.git")
+              Pkg.add(url="https://github.com/JuliaStellarDynamics/DistributionFunctions.jl.git")
+            ls
+            julia --project=df -e '
+              using Pkg
+              Pkg.develop(PackageSpec(path="/home/runner/work/DistributionFunctions.jl/DistributionFunctions.jl"))'
+            julia --project=df test/runtests.jl
+
+

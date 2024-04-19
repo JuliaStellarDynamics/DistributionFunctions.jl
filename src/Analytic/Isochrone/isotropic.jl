@@ -22,7 +22,7 @@ function F(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
     # rescale dimensionless energy to goes between 0 and 1/2
     mE = E/scaleEnergy
 
-    return (sqrt(mE)*M*(27.0+2.0*mE*(-1.0+4.0*mE)*(33.0+4.0*mE*(-7.0+2.0*mE))+
+    return (sqrt(mE)*df.potential.M*(27.0+2.0*mE*(-1.0+4.0*mE)*(33.0+4.0*mE*(-7.0+2.0*mE))+
     (3.0*(-9.0+4.0*mE*(7.0+4.0*mE))*asin(sqrt(mE)))/sqrt(-((-1.0+mE)*mE))))/
     (128.0*sqrt(2.0)*(-1.0+mE)^(4)*scaleDF*(pi)^(3))
 
