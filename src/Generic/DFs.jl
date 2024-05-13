@@ -6,22 +6,48 @@ Abstract type for distribution functions
 """
 abstract type DistributionFunction end
 
-"""
-Abstract type for energy-only distribution functions
-"""
-abstract type EnergyOnlyDistributionFunction <: DistributionFunction end
-
-
 #####################################
-# Generic functions (not methods)
+# Generic functions
 #####################################
 """
     F(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
 
 Distribution function `distributionfunction` for a given `E`,`L`.
 """
-function F(EL::Tuple{Float64,Float64}, df::DistributionFunction)
+function Distribution(EL::Tuple{Float64,Float64}, df::DistributionFunction)
     # ... [model specific implementation] ...
+end
+
+"""
+    DFDE(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
+
+Energy derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
+"""
+function DFDE(EL::Tuple{Float64,Float64}, df::DistributionFunction)
+    # ... [model specific implementation] ...
+end
+
+"""
+    DFDL(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
+
+Angular momentum derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
+"""
+function DFDL(EL::Tuple{Float64,Float64}, df::DistributionFunction)
+    # ... [model specific implementation] ...
+end
+
+"""
+    gradient(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
+
+Angular momentum derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
+"""
+function gradient(EL::Tuple{Float64,Float64}, df::DistributionFunction)
+
+    DFDEval = DFDE(EL,df)
+    DFDLval = DFDL(EL,df)
+
+    return DFDEval,DFDLval
+    
 end
 
 """
@@ -30,8 +56,16 @@ end
 Distribution function derivative for `distributionfunction` for a given `E`,`L`.
 """
 function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance::Resonance, df::DistributionFunction)
-        # ... [model specific implementation] ...
-end
+
+        DFDEval = DFDE(EL,df)
+        DFDLval = DFDL(EL,df)
+        Ω1,Ω2   = ΩΩ
+        n1,n2   = resonance.number[1],resonance.number[2]
+        ndotΩ   = n1*Ω1 + n2*Ω2
+
+        return DFDEval * ndotΩ + DFDLval * n2
+
+    end
 
 
 #####################################

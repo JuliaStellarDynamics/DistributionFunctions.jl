@@ -10,7 +10,7 @@ using HypergeometricFunctions
 
 Miyamoto distribution function for Kuzmin-Toomre disc.
 """
-function miyamoto_distribution(E::Float64, L::Float64; mM::Int64=1)
+function Distribution(E::Float64, L::Float64; mM::Int64=1)
     return (
         (2mM + 3)
         * (-E)^(2mM + 2)
@@ -24,7 +24,7 @@ end
 
 Miyamoto distribution derivative w.r.t. energy.
 """
-function miyamoto_dFdE(E::Float64, L::Float64; mM::Int64=1)
+function DFDE(E::Float64, L::Float64; mM::Int64=1)
     return (
         E^(2mM)
         * (1 + mM)
@@ -42,7 +42,7 @@ end
 
 Miyamoto distribution derivative w.r.t. angular momentum.
 """
-function miyamoto_dFdL(E::Float64, L::Float64; mM::Int64=1)
+function DFDL(E::Float64, L::Float64; mM::Int64=1)
 
     return -(
         2
@@ -56,22 +56,3 @@ function miyamoto_dFdL(E::Float64, L::Float64; mM::Int64=1)
     )
 end
 
-"""
-    miyamoto_ndFdJ(n1, n2, E, L, ndotOmega[, mM])
-
-Miyamoto distribution derivatives w.r.t. the actions.
-"""
-function miyamoto_ndFdJ(
-    n1::Int64,
-    n2::Int64,
-    E::Float64,
-    L::Float64,
-    ndotOmega::Float64;
-    mM::Int64=1
-)
-
-    dFdE = miyamoto_dFdE(E, L; mM=mM)
-    dFdL = miyamoto_dFdL(E, L; mM=mM)
-    
-    return ndotOmega*dFdE + n2*dFdL
-end

@@ -19,7 +19,7 @@ jobs:
               Pkg.add("BenchmarkTools")
               Pkg.add("Test")
               Pkg.add(url="https://github.com/JuliaStellarDynamics/OrbitalElements.jl.git")
-              Pkg.add(url="https://github.com/JuliaStellarDynamics/DistributionFunctions.jl.git")
+              Pkg.add(url="https://github.com/JuliaStellarDynamics/DistributionFunctions.jl.git")'
             ls
             julia --project=df -e '
               using Pkg

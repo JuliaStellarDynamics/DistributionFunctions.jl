@@ -2,12 +2,12 @@
 # Isochrone distribution functions (analytic)
 #####################################
 abstract type IsochroneDistributionFunction <: DistributionFunction end
-struct IsotropicIsochrone <: IsochroneDistributionFunction
-    potential::IsochronePotential # Potential model
+struct IsotropicIsochrone{modelT<:IsochronePotential} <: IsochroneDistributionFunction
+    potential::modelT # Potential model
 end
-struct OsipkovMerrittIsochrone <: IsochroneDistributionFunction
+struct OsipkovMerrittIsochrone{modelT<:IsochronePotential} <: IsochroneDistributionFunction
     ra::Float64                # Anisotropy radius
-    potential::IsochronePotential # Potential model
+    potential::modelT # Potential model
 end
 
 """

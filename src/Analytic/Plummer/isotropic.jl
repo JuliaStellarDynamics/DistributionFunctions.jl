@@ -13,7 +13,7 @@ end
 """
 The distribution function for the isotropic Plummer model
 """
-function F(EL::Tuple{Float64,Float64}, df::IsotropicPlummer)
+function Distribution(EL::Tuple{Float64,Float64}, df::IsotropicPlummer)
     E,L = EL
 
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc
@@ -31,7 +31,9 @@ the derivative of the isotropic distribution function
 F[EN_] = (24 Sqrt[2])/(7 Pi^3) * EN^(7/2)
 D[F[EN], {EN}]
 """
-function dFdE(E::Float64,df::IsotropicPlummer)
+function DFDE(EL::Tuple{Float64,Float64},df::IsotropicPlummer)
+
+    E,L = EL
 
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc
     scaleDF     = dfscale(df)
@@ -42,19 +44,9 @@ function dFdE(E::Float64,df::IsotropicPlummer)
 
 end
 
+function DFDL(EL::Tuple{Float64,Float64},df::IsotropicPlummer)::Float64
 
-"""
-calculate n.dF/dE, for the isotropic plummer case.
-"""
-function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance::Resonance, df::IsotropicPlummer)
-    E,L = EL
-    Ω1,Ω2 = ΩΩ
-    ndotΩ = resonance.number[1]*Ω1 + resonance.number[2]*Ω2
+    return 0.0
 
-    dFdE = dFdE(E,df)
-
-    # Value of n.dF/dJ
-    result = ndotΩ*dFdE
-
-    return result
 end
+

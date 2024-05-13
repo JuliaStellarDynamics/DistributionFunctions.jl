@@ -10,10 +10,10 @@ end
 
 
 
-"""isochroneisotropicDF(E[,bc,M,G])
+"""Distribution(E[,bc,M,G])
 the isotropic DF
 """
-function F(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
+function Distribution(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
     E,L = EL
 
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc
@@ -29,10 +29,10 @@ function F(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
 end
 
 
-"""isochroneisotropicdDFdE(E[,bc,M,G])
+"""DFDE(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
 the isotropic DF derivative w.r.t. E
 """
-function dFdE(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
+function DFDE(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
 
     E,L = EL
 
@@ -50,14 +50,12 @@ function dFdE(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
 end
 
 
-function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance::Resonance, df::IsotropicIsochrone)
-    Ω1,Ω2 = ΩΩ
-    ndotΩ = resonance.number[1]*Ω1 + resonance.number[2]*Ω2
+"""DFDL(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
+the isotropic DF derivative w.r.t. L: always zero!
+"""
+function DFDL(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)::Float64
 
-    dFdEval = dFdE(EL,df)
+    return 0.0
 
-    # Value of n.dF/dJ
-    result = ndotΩ*dFdEval
-
-    return result
 end
+

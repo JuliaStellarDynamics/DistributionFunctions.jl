@@ -48,7 +48,7 @@ end
 """
 the anisotropic distribution function from PlummerPlus
 """
-function F(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function Distribution(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
 
     Q       = osipkovmerritt_Q(EL, df)
     scaleDF = dfscale(df)
@@ -60,6 +60,44 @@ function F(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
 
     return prefactor * (Q^(7/2)) * (1-gamma+7gamma/(16*(Q^2)))
 
+end
+
+function DFDE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)::Float64
+
+    Q = osipkovmerritt_Q(EL, df)
+
+    # If Q is outside of the [0,1]--range, we set the function to 0.0
+    # ATTENTION, this is a lazy implementation -- it would have been much better to restrict the integration domain
+    if (!(0.0 <= Q <= 1.0)) # If Q is outside of the [0,1]-range, we set the function to 0
+        return 0.0 # Outside of the physically allowed orbital domain
+    end
+
+    # Value of dF/dQ
+    dFdQ = osipkovmerritt_dFdQ(EL,df)
+
+    # Value of dQ/dE, dQ/dL
+    dQdE = osipkovmerritt_dQdE(EL,df)
+
+    return dFdQ*dQdE
+end
+
+function DFDL(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)::Float64
+
+    Q = osipkovmerritt_Q(EL, df)
+
+    # If Q is outside of the [0,1]--range, we set the function to 0.0
+    # ATTENTION, this is a lazy implementation -- it would have been much better to restrict the integration domain
+    if (!(0.0 <= Q <= 1.0)) # If Q is outside of the [0,1]-range, we set the function to 0
+        return 0.0 # Outside of the physically allowed orbital domain
+    end
+
+    # Value of dF/dQ
+    dFdQ = osipkovmerritt_dFdQ(EL,df)
+
+    # Value of  dQ/dL
+    dQdL =  osipkovmerritt_dQdL(EL,df)
+
+    return dFdQ*dQdL
 end
 
 
@@ -79,35 +117,3 @@ function osipkovmerritt_dFdQ(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlumm
 
 end
 
-
-"""
-calculate n.dF/dJ, for the osipkov-merritt plummer case.
-
-@IMPROVE, make a distribution function fix. perhaps only integrate in regions where the DF is positive?
-"""
-function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance::Resonance, df::OsipkovMerrittPlummer)
-
-    Ω1,Ω2 = ΩΩ
-    n1,n2 = resonance.number[1],resonance.number[2]
-    ndotΩ = n1*Ω1 + n2*Ω2
-
-    Q = osipkovmerritt_Q(EL, df)
-
-    # If Q is outside of the [0,1]--range, we set the function to 0.0
-    # ATTENTION, this is a lazy implementation -- it would have been much better to restrict the integration domain
-    if (!(0.0 <= Q <= 1.0)) # If Q is outside of the [0,1]-range, we set the function to 0
-        return 0.0 # Outside of the physically allowed orbital domain
-    end
-
-    # Value of dF/dQ
-    dFdQ = osipkovmerritt_dFdQ(EL,df)
-
-    # Values of dQ/dE, dQ/dL
-    dQdE, dQdL = osipkovmerritt_dQdE(EL,df), osipkovmerritt_dQdL(EL,df)
-
-    # Value of n.dF/dJ
-    result = dFdQ*(dQdE*ndotΩ + n2*dQdL)
-
-    return result
-
-end

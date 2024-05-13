@@ -51,7 +51,7 @@ end
 Saha distribution function
 ra is the anisotropy radius
 """
-function F(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)
+function Distribution(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)::Float64
 
     Q       = osipkovmerritt_Q(EL, df)
     scaleDF = dfscale(df)
@@ -93,15 +93,8 @@ function osipkovmerritt_dFdQ(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsoch
 
 end
 
+function DFDE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)::Float64
 
-
-function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance::Resonance, df::OsipkovMerrittIsochrone)
-
-
-    Ω1,Ω2 = ΩΩ
-    n1,n2 = resonance.number[1],resonance.number[2]
-    ndotΩ = n1*Ω1 + n2*Ω2
-    
     Q = osipkovmerritt_Q(EL,df)
 
     # If Q is outside of the [0,1]--range, we set the function to 0.0
@@ -113,12 +106,27 @@ function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance
     # Value of dF/dQ
     dFdQ = osipkovmerritt_dFdQ(EL,df)
 
-    # Values of dQ/dE, dQ/dL
-    dQdE, dQdL = osipkovmerritt_dQdE(EL,df), osipkovmerritt_dQdL(EL,df)
+    # Value of dQ/dE
+    dQdE = osipkovmerritt_dQdE(EL,df)
 
-    # Value of n.dF/dJ
-    result = dFdQ*(dQdE*ndotΩ + n2*dQdL)
+    return dFdQ * dQdE
+end
 
-    return result
+function DFDL(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)::Float64
 
+    Q = osipkovmerritt_Q(EL,df)
+
+    # If Q is outside of the [0,1]--range, we set the function to 0.0
+    # ATTEN TION, this is a lazy implementation -- it would have been much better to restrict the integration domain
+    if (!(0.0 <= Q <= 1.0)) # If Q is outside of the [0,1]-range, we set the function to 0
+        return 0.0 # Outside of the physically allowed orbital domain
+    end
+
+    # Value of dF/dQ
+    dFdQ = osipkovmerritt_dFdQ(EL,df)
+
+    # Value dQ/dL
+    dQdL = osipkovmerritt_dQdL(EL,df)
+
+    return dFdQ * dQdL
 end

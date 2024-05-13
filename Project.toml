@@ -1,6 +1,6 @@
 name = "DistributionFunctions"
 uuid = "c869f47d-2815-40f9-b874-25ebe83f43af"
-version = "0.0.6dev"
+version = "0.0.7dev"
 
 [deps]
 OrbitalElements = "a3b07092-bde3-4843-b84f-c597d614ec7b"
