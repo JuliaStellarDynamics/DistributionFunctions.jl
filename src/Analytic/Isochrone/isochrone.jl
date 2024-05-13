@@ -1,7 +1,7 @@
 #####################################
 # Isochrone distribution functions (analytic)
 #####################################
-abstract type IsochroneDistributionFunction <: DistributionFunction end
+abstract type IsochroneDistributionFunction <: SphericalDistributionFunction end
 struct IsotropicIsochrone{modelT<:IsochronePotential} <: IsochroneDistributionFunction
     potential::modelT # Potential model
 end

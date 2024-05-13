@@ -6,6 +6,22 @@ Abstract type for distribution functions
 """
 abstract type DistributionFunction end
 
+"""
+Geometries
+"""
+abstract type SphericalDistributionFunction <: DistributionFunction end
+abstract type RazorThinDiscDistributionFunction <: DistributionFunction end
+
+"""
+Defining Coordinates
+"""
+abstract type EnergyOnlyDistributionFunction <: SphericalDistributionFunction end
+abstract type SphericalEnergyAngularMomentumDistributionFunction <: SphericalDistributionFunction end
+abstract type SphericalActionDistributionFunction <: SphericalDistributionFunction end
+
+abstract type DiscEnergyAngularMomentumDistributionFunction <: RazorThinDiscDistributionFunction end
+abstract type DiscActionDistributionFunction <: RazorThinDiscDistributionFunction end
+
 #####################################
 # Generic functions
 #####################################
