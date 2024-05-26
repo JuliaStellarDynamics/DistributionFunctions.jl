@@ -6,10 +6,12 @@ OsipkovMerrittIsochrone([potential])
 
 Osipkov-Merritt anisotropy radius Isochrone distribution function. Uses OrbitalElements.NumericalIsochrone by default.
 """
-function OsipkovMerrittIsochrone(ra::Float64; potential::IsochronePotential=NumericalIsochrone())
-    return OsipkovMerrittIsochrone(ra,potential)
+function OsipkovMerrittIsochroneEL(ra::Float64; potential::IsochronePotential=NumericalIsochrone())
+    return OsipkovMerrittIsochroneEL(ra,potential)
 end
-
+function OsipkovMerrittIsochroneJL(ra::Float64; potential::IsochronePotential=NumericalIsochrone())
+    return OsipkovMerrittIsochroneJL(ra,potential)
+end
 
 """
     osipkovmerritt_Q(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)

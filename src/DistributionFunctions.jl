@@ -10,11 +10,14 @@ using OrbitalElements             # potentials, resonances
 # Exports
 #####################################
 export DistributionFunction
-export Distribution,DFDE,DFDL,gradient,ndFdJ
+export Distribution,DFDE,DFDL,gradient
+
+# types for multiple dispatch
+export EnergyOnlyDistributionFunction,EnergyAngularMomentumDistributionFunction,ActionDistributionFunction
 
 # spheres
-export PlummerDistributionFunction,IsotropicPlummer,OsipkovMerrittPlummer
-export IsochroneDistributionFunction,IsotropicIsochrone,OsipkovMerrittIsochrone
+export PlummerDistributionFunction,IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL
+export IsochroneDistributionFunction,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIsochroneJL
 
 # discs
 export MestelDisc,ZangDisc,TruncatedZangDisc

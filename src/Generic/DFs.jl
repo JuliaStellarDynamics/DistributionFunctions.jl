@@ -22,6 +22,13 @@ abstract type SphericalActionDistributionFunction <: SphericalDistributionFuncti
 abstract type DiscEnergyAngularMomentumDistributionFunction <: RazorThinDiscDistributionFunction end
 abstract type DiscActionDistributionFunction <: RazorThinDiscDistributionFunction end
 
+# unify all energy angular momentum types
+const EnergyAngularMomentumDistributionFunction = Union{EnergyOnlyDistributionFunction,SphericalEnergyAngularMomentumDistributionFunction,DiscEnergyAngularMomentumDistributionFunction}
+
+# unify all action types
+const ActionDistributionFunction = Union{SphericalActionDistributionFunction,DiscActionDistributionFunction}
+
+
 #####################################
 # Generic functions
 #####################################
@@ -53,11 +60,11 @@ function DFDL(EL::Tuple{Float64,Float64}, df::DistributionFunction)
 end
 
 """
-    gradient(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
+    gradient(EL::Tuple{Float64,Float64}, distributionfunction::EnergyAngularMomentumDistributionFunction)
 
 Angular momentum derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
 """
-function gradient(EL::Tuple{Float64,Float64}, df::DistributionFunction)
+function gradient(EL::Tuple{Float64,Float64}, df::EnergyAngularMomentumDistributionFunction)
 
     DFDEval = DFDE(EL,df)
     DFDLval = DFDL(EL,df)
@@ -67,26 +74,30 @@ function gradient(EL::Tuple{Float64,Float64}, df::DistributionFunction)
 end
 
 """
-    ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},res::Resonance, distributionfunction::DistributionFunction)
+    gradient(JL::Tuple{Float64,Float64}, distributionfunction::ActionDistributionFunction)
 
-Distribution function derivative for `distributionfunction` for a given `E`,`L`.
+Angular momentum derivative of a given distribution function `distributionfunction` for a given `Jr`,`L`.
+
 """
-function ndFdJ(EL::Tuple{Float64,Float64},ΩΩ::Tuple{Float64,Float64},resonance::Resonance, df::DistributionFunction)
+function gradient(EL::Tuple{Float64,Float64}, df::ActionDistributionFunction; Ω1::Float64=-1)
 
-        DFDEval = DFDE(EL,df)
-        DFDLval = DFDL(EL,df)
-        Ω1,Ω2   = ΩΩ
-        n1,n2   = resonance.number[1],resonance.number[2]
-        ndotΩ   = n1*Ω1 + n2*Ω2
+    DFDEval = DFDE(EL,df)
+    DFDLval = DFDL(EL,df)
 
-        return DFDEval * ndotΩ + DFDLval * n2
-
+    if (Ω1 == -1)
+        a,e = ae_from_EL(E,L,df.potential)
+        Ω1,_ = frequencies_from_ae(a,e,df.potential)
     end
+
+    # now convert using the Jacobian dE/dJ = Ω1
+    return Ω1 * DFDEval,DFDLval
+    
+end
 
 
 #####################################
 # Include analytic distribution functions
 #####################################
-include("../Analytic/Isochrone/isochrone.jl")
-include("../Analytic/Plummer/plummer.jl")
+include("../Analytic/Spheres/Isochrone/isochrone.jl")
+include("../Analytic/Spheres/Plummer/plummer.jl")
 include("../Analytic/RazorThinDiscs/razorthindiscs.jl")

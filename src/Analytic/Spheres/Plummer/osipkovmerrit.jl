@@ -5,8 +5,11 @@ OsipkovMerrittPlummer([potential])
 
 Osipkov-Merritt anisotropy radius Plummer distribution function. Uses OrbitalElements.NumericalPlummer by default.
 """
-function OsipkovMerrittPlummer(ra::Float64; potential::PlummerPotential=NumericalPlummer())
-    return OsipkovMerrittPlummer(ra,potential)
+function OsipkovMerrittPlummerEL(ra::Float64; potential::PlummerPotential=NumericalPlummer())
+    return OsipkovMerrittPlummerEL(ra,potential)
+end
+function OsipkovMerrittPlummerJL(ra::Float64; potential::PlummerPotential=NumericalPlummer())
+    return OsipkovMerrittPlummerJL(ra,potential)
 end
 
 
