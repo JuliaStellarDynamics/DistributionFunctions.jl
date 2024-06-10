@@ -9,24 +9,27 @@ abstract type DistributionFunction end
 """
 Geometries
 """
-abstract type SphericalDistributionFunction <: DistributionFunction end
-abstract type RazorThinDiscDistributionFunction <: DistributionFunction end
+abstract type SphericalDF <: DistributionFunction end
+abstract type RazorThinDiscDF <: DistributionFunction end
 
 """
 Defining Coordinates
 """
-abstract type EnergyOnlyDistributionFunction <: SphericalDistributionFunction end
-abstract type SphericalEnergyAngularMomentumDistributionFunction <: SphericalDistributionFunction end
-abstract type SphericalActionDistributionFunction <: SphericalDistributionFunction end
+abstract type ErgodicDF <: SphericalDF end
+abstract type SphericalEnergyAngularMomentumDF <: SphericalDF end
+abstract type SphericalActionDF <: SphericalDF end
 
-abstract type DiscEnergyAngularMomentumDistributionFunction <: RazorThinDiscDistributionFunction end
-abstract type DiscActionDistributionFunction <: RazorThinDiscDistributionFunction end
+abstract type DiscEnergyAngularMomentumDF <: RazorThinDiscDF end
+abstract type DiscActionDF <: RazorThinDiscDF end
 
 # unify all energy angular momentum types
-const EnergyAngularMomentumDistributionFunction = Union{EnergyOnlyDistributionFunction,SphericalEnergyAngularMomentumDistributionFunction,DiscEnergyAngularMomentumDistributionFunction}
+const EnergyAngularMomentumDF = Union{ErgodicDF,SphericalEnergyAngularMomentumDF,DiscEnergyAngularMomentumDF}
+
+# shorted the calls:
+#SphereELDF
 
 # unify all action types
-const ActionDistributionFunction = Union{SphericalActionDistributionFunction,DiscActionDistributionFunction}
+const ActionDF = Union{SphericalActionDF,DiscActionDF}
 
 
 #####################################
@@ -37,34 +40,17 @@ const ActionDistributionFunction = Union{SphericalActionDistributionFunction,Dis
 
 Distribution function `distributionfunction` for a given `E`,`L`.
 """
-function Distribution(EL::Tuple{Float64,Float64}, df::DistributionFunction)
+function DistributionFunction(EL::Tuple{Float64,Float64}, df::DistributionFunction)
     # ... [model specific implementation] ...
 end
 
-"""
-    DFDE(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
-
-Energy derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
-"""
-function DFDE(EL::Tuple{Float64,Float64}, df::DistributionFunction)
-    # ... [model specific implementation] ...
-end
-
-"""
-    DFDL(EL::Tuple{Float64,Float64}, distributionfunction::DistributionFunction)
-
-Angular momentum derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
-"""
-function DFDL(EL::Tuple{Float64,Float64}, df::DistributionFunction)
-    # ... [model specific implementation] ...
-end
 
 """
     gradient(EL::Tuple{Float64,Float64}, distributionfunction::EnergyAngularMomentumDistributionFunction)
 
 Angular momentum derivative of a given distribution function `distributionfunction` for a given `E`,`L`.
 """
-function gradient(EL::Tuple{Float64,Float64}, df::EnergyAngularMomentumDistributionFunction)
+function gradient(EL::Tuple{Float64,Float64}, df::EnergyAngularMomentumDF)
 
     DFDEval = DFDE(EL,df)
     DFDLval = DFDL(EL,df)
@@ -79,18 +65,12 @@ end
 Angular momentum derivative of a given distribution function `distributionfunction` for a given `Jr`,`L`.
 
 """
-function gradient(EL::Tuple{Float64,Float64}, df::ActionDistributionFunction; Ω1::Float64=-1)
+function gradient(JL::Tuple{Float64,Float64}, df::ActionDF)
 
-    DFDEval = DFDE(EL,df)
-    DFDLval = DFDL(EL,df)
+    DFDJval = DFDJ(JL,df)
+    DFDLval = DFDL(JL,df)
 
-    if (Ω1 == -1)
-        a,e = ae_from_EL(E,L,df.potential)
-        Ω1,_ = frequencies_from_ae(a,e,df.potential)
-    end
-
-    # now convert using the Jacobian dE/dJ = Ω1
-    return Ω1 * DFDEval,DFDLval
+    return DFDJval,DFDLval
     
 end
 

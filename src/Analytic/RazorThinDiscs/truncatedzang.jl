@@ -31,7 +31,7 @@ end
 
 Zang star distribution function enforcing ra <= Rmax.
 """
-function Distribution(EL::Tuple{Float64,Float64},df::TruncatedZangDisc)::Float64
+function DistributionFunction(EL::Tuple{Float64,Float64},df::TruncatedZangDisc)::Float64
 
     # will return zero if outside truncated region
     result = truncationcriteria(EL::Tuple{Float64,Float64},df::TruncatedZangDisc)

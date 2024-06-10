@@ -9,6 +9,7 @@ function OsipkovMerrittPlummerEL(ra::Float64; potential::PlummerPotential=Numeri
     return OsipkovMerrittPlummerEL(ra,potential)
 end
 function OsipkovMerrittPlummerJL(ra::Float64; potential::PlummerPotential=NumericalPlummer())
+    # this doesn't exist. use (E,L) instead
     return OsipkovMerrittPlummerJL(ra,potential)
 end
 
@@ -51,7 +52,7 @@ end
 """
 the anisotropic distribution function from PlummerPlus
 """
-function Distribution(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function DistributionFunction(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
 
     Q       = osipkovmerritt_Q(EL, df)
     scaleDF = dfscale(df)

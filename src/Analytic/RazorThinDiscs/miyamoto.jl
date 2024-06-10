@@ -10,7 +10,7 @@ using HypergeometricFunctions
 
 Miyamoto distribution function for Kuzmin-Toomre disc.
 """
-function Distribution(E::Float64, L::Float64; mM::Int64=1)
+function DistributionFunction(E::Float64, L::Float64; mM::Int64=1)
     return (
         (2mM + 3)
         * (-E)^(2mM + 2)

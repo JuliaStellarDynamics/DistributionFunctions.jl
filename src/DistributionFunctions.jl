@@ -3,23 +3,27 @@ module DistributionFunctions
 #####################################
 # Dependencies
 #####################################
-using OrbitalElements             # potentials, resonances
+using OrbitalElements             # potentials
 
 
 #####################################
 # Exports
 #####################################
 export DistributionFunction
-export Distribution,DFDE,DFDL,gradient
+
+# functions common to all DistributionFunction
+export distribution,gradient
 
 # types for multiple dispatch
-export EnergyOnlyDistributionFunction,EnergyAngularMomentumDistributionFunction,ActionDistributionFunction
+export ErgodicDF,EnergyAngularMomentumDF,ActionDF
 
 # spheres
-export PlummerDistributionFunction,IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL
-export IsochroneDistributionFunction,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIsochroneJL
+# change to DF
+export PlummerDF,IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL
+export IsochroneDF,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIsochroneJL
 
 # discs
+# add DF here
 export MestelDisc,ZangDisc,TruncatedZangDisc
 
 

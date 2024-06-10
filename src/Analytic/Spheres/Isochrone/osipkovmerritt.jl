@@ -53,7 +53,7 @@ end
 Saha distribution function
 ra is the anisotropy radius
 """
-function Distribution(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)::Float64
+function DistributionFunction(EL::Tuple{Float64,Float64}, df::OsipkovMerrittIsochrone)::Float64
 
     Q       = osipkovmerritt_Q(EL, df)
     scaleDF = dfscale(df)

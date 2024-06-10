@@ -13,7 +13,7 @@ end
 """
 The distribution function for the isotropic Plummer model
 """
-function Distribution(EL::Tuple{Float64,Float64}, df::IsotropicPlummer)
+function DistributionFunction(EL::Tuple{Float64,Float64}, df::IsotropicPlummer)
     E,L = EL
 
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc

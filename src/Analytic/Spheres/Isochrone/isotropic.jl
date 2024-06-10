@@ -13,7 +13,7 @@ end
 """Distribution(E[,bc,M,G])
 the isotropic DF
 """
-function Distribution(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
+function DistributionFunction(EL::Tuple{Float64,Float64}, df::IsotropicIsochrone)
     E,L = EL
 
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc

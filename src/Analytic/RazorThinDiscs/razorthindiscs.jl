@@ -8,21 +8,21 @@ const IntorFloat = Union{Int64,Float64}
 #####################################
 # Disc distribution functions (analytic)
 #####################################
-abstract type DiscDistributionFunction <: DistributionFunction end
-abstract type MestelPotentialDistributionFunction <: DiscDistributionFunction end
-abstract type ZangDistributionFunction <: MestelPotentialDistributionFunction end
+abstract type DiscDF <: DiscEnergyAngularMomentumDF end
+abstract type MestelPotentialDF <: DiscDF end
+abstract type ZangDF <: MestelPotentialDF end
 
 const MestelPotentials = Union{MestelPotential,TaperedMestel}
 
 
 # @IMPROVE, these potentials are not specific at all: but need to be either MestelPotential or TaperedMestel
-struct MestelDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: MestelPotentialDistributionFunction
+struct MestelDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: MestelPotentialDF
     potential::modelT # potential model
     q::qT                   # velocity dispersion parameter
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
 end
 
-struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDistributionFunction
+struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     potential::modelT # potential model
     q::qT                # velocity dispersion parameter
     ν::Int64                   # inner taper
@@ -32,7 +32,7 @@ struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDistributionFunc
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)   
 end
 
-struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDistributionFunction
+struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     potential::modelT # potential model
     q::qT                 # velocity dispersion parameter
     ν::Int64                   # inner taper
@@ -48,7 +48,7 @@ end
 
 radial velocity dispersion of the tapered Mestel DF
 """
-function σMestelDistribution(df::MestelPotentialDistributionFunction)::Float64
+function σMestelDistribution(df::MestelPotentialDF)::Float64
     return df.potential.V0 / sqrt(df.q+1)
 end
 
@@ -57,7 +57,7 @@ end
 
 normalization constant of the tapered Mestel DF.
 """
-function NormConstMestelDistribution(df::MestelPotentialDistributionFunction)::Float64
+function NormConstMestelDistribution(df::MestelPotentialDF)::Float64
     σ = σMestelDistribution(df)
     return (df.potential.V0)^(2) / ( 2^(df.q/2+1) * (pi)^(3/2) * df.G * gamma(0.5+0.5*df.q) * (σ)^(df.q+2) * (df.potential.R0)^(df.q+1) )
 end
@@ -66,7 +66,7 @@ end
     MestelDistribution(EL::Tuple{Float64,Float64},df::MestelDisc)
 Mestel distribution function.
 """
-function MestelDistribution(EL::Tuple{Float64,Float64},df::MestelPotentialDistributionFunction)::Float64
+function MestelDistribution(EL::Tuple{Float64,Float64},df::MestelPotentialDF)::Float64
 
     E,L = EL
     σ = σMestelDistribution(df)
@@ -79,17 +79,17 @@ end
     MesteldFdE(EL::Tuple{Float64,Float64},df::MestelDisc)
 Mestel DF derivative w.r.t. E.
 """
-function MesteldFdE(EL::Tuple{Float64,Float64},df::MestelPotentialDistributionFunction)::Float64
+function MesteldFdE(EL::Tuple{Float64,Float64},df::MestelPotentialDF)::Float64
 
     σ = σMestelDistribution(df)
-    return - Distribution(EL,df) / (σ^2)
+    return - DistributionFunction(EL,df) / (σ^2)
 end
 
 """
     MesteldFdL(E, L[, C, q, sigma])
 Mestel DF derivative w.r.t. E.
 """
-function MesteldFdL(EL::Tuple{Float64,Float64},df::MestelPotentialDistributionFunction)::Float64
+function MesteldFdL(EL::Tuple{Float64,Float64},df::MestelPotentialDF)::Float64
 
     E,L = EL
     σ = σMestelDistribution(df)

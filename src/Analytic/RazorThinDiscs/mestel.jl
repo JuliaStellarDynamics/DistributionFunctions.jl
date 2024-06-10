@@ -13,7 +13,7 @@ end
     MestelDistribution(EL::Tuple{Float64,Float64},df::MestelDisc)
 Mestel distribution function.
 """
-function Distribution(EL::Tuple{Float64,Float64},df::MestelDisc)::Float64
+function DistributionFunction(EL::Tuple{Float64,Float64},df::MestelDisc)::Float64
 
     return MestelDistribution(EL,df)
 end
