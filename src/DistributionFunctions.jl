@@ -12,18 +12,16 @@ using OrbitalElements             # potentials
 export DistributionFunction
 
 # functions common to all DistributionFunction
-export distribution,gradient
+export gradient
 
 # types for multiple dispatch
 export ErgodicDF,EnergyAngularMomentumDF,ActionDF
 
 # spheres
-# change to DF
 export PlummerDF,IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL
 export IsochroneDF,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIsochroneJL
 
 # discs
-# add DF here
 export MestelDisc,ZangDisc,TruncatedZangDisc
 
 

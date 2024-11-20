@@ -48,5 +48,16 @@ a,e = 1.0,0.5
             @test gradient(EL, OMDF)[1] ≈ -0.07755405 atol=1e-6
             @test gradient(EL, OMDF)[2] ≈ -0.060270980 atol=1e-6
         end
+        @testset "osipkovmerrittlimit" begin
+            IsoDF = IsotropicPlummer()
+            ra = 1.e6 # this should match the isotropic case
+            OMDF = OsipkovMerrittPlummerEL(ra)
+            EL = EL_from_ae(1.0,0.5,OMDF.potential)
+            ΩΩ = frequencies_from_ae(a,e,OMDF.potential)
+            resonance = Resonance(n1,n2,OMDF.potential)
+            @test DistributionFunction(EL, OMDF) ≈ DistributionFunction(EL, IsoDF) atol=1e-6  
+            @test gradient(EL, OMDF)[1] ≈ gradient(EL, IsoDF)[1] atol=1e-6
+            @test gradient(EL, OMDF)[2] ≈ gradient(EL, IsoDF)[2] atol=1e-6
+        end
     end
 end

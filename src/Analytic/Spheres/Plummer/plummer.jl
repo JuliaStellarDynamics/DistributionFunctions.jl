@@ -16,7 +16,7 @@ end
 # create a type union for all Plummer distribution functions
 const PlummerDF = Union{IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL}
 
-# unify the osipkov-merritt methods
+# unify the osipkov-merritt types
 const OsipkovMerrittPlummer = Union{OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL}
 
 """
