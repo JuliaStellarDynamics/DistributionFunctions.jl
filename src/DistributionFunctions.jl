@@ -18,7 +18,7 @@ export gradient
 export ErgodicDF,EnergyAngularMomentumDF,ActionDF
 
 # spheres
-export PlummerDF,IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL
+export PlummerDF,IsotropicPlummer,OsipkovMerrittPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL
 export IsochroneDF,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIsochroneJL
 
 # discs

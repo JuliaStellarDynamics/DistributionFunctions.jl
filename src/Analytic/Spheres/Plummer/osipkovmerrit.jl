@@ -5,6 +5,10 @@ OsipkovMerrittPlummer([potential])
 
 Osipkov-Merritt anisotropy radius Plummer distribution function. Uses OrbitalElements.NumericalPlummer by default.
 """
+function OsipkovMerrittPlummer(ra::Float64; potential::PlummerPotential=NumericalPlummer())
+    # alias for E,L version (the only one currently implemented)
+    return OsipkovMerrittPlummerEL(ra,potential)
+end
 function OsipkovMerrittPlummerEL(ra::Float64; potential::PlummerPotential=NumericalPlummer())
     return OsipkovMerrittPlummerEL(ra,potential)
 end
@@ -21,7 +25,7 @@ Q(E,L), the variable for anisotropy distribution functions.
 
 when ra->infty, this is isotropic.
 """
-function osipkovmerritt_Q(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function osipkovmerritt_Q(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)
     E,L = EL
 
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc
@@ -34,7 +38,7 @@ end
 """
 jacobian for converting dF/dQ dQ/dE -> dF/dE
 """
-function osipkovmerritt_dQdE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function osipkovmerritt_dQdE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc
     return 1.0/scaleEnergy # Output
 end
@@ -42,7 +46,7 @@ end
 """
 jacobian for converting dF/dQ dQ/dL -> dF/dL
 """
-function osipkovmerritt_dQdL(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function osipkovmerritt_dQdL(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)
     E,L = EL
     scaleEnergy = - df.potential.G * df.potential.M / df.potential.bc
     return (L*(df.potential.bc^2))/(scaleEnergy*df.ra^(2)) # Output
@@ -52,7 +56,7 @@ end
 """
 the anisotropic distribution function from PlummerPlus
 """
-function DistributionFunction(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function DistributionFunction(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)
 
     Q       = osipkovmerritt_Q(EL, df)
     scaleDF = dfscale(df)
@@ -66,7 +70,7 @@ function DistributionFunction(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlum
 
 end
 
-function DFDE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)::Float64
+function DFDE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)::Float64
 
     Q = osipkovmerritt_Q(EL, df)
 
@@ -85,7 +89,7 @@ function DFDE(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)::Float64
     return dFdQ*dQdE
 end
 
-function DFDL(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)::Float64
+function DFDL(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)::Float64
 
     Q = osipkovmerritt_Q(EL, df)
 
@@ -108,7 +112,7 @@ end
 """
 the derivative of the anisotropic distribution function
 """
-function osipkovmerritt_dFdQ(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummer)
+function osipkovmerritt_dFdQ(EL::Tuple{Float64,Float64}, df::OsipkovMerrittPlummerDF)
 
     Q       = osipkovmerritt_Q(EL, df)
     scaleDF = dfscale(df)

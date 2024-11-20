@@ -17,7 +17,7 @@ end
 const PlummerDF = Union{IsotropicPlummer,OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL}
 
 # unify the osipkov-merritt types
-const OsipkovMerrittPlummer = Union{OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL}
+const OsipkovMerrittPlummerDF = Union{OsipkovMerrittPlummerEL,OsipkovMerrittPlummerJL}
 
 """
 the Plummer distribution function scale
