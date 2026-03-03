@@ -191,8 +191,7 @@ function MiyamotodFdL(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
     tL = L/L0
 
     dtFdtL = M/(L0^2) * (
-        2
-        * tE^(1 + 2mM)
+        tE^(1 + 2mM)
         * tL
         * mM
         * (1 + mM)
