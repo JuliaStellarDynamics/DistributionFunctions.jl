@@ -35,4 +35,14 @@ a,e = 0.1,0.0
         @test gradient(EL, DDF)[2] == gradient(EL, DFcomp)[2]
         # test outside the valid region?
     end
+
+    @testset "toomre" begin
+        DDF = ToomreDisc()
+        EL = EL_from_ae(a,e,DDF.potential)
+        ΩΩ = frequencies_from_ae(a,e,DDF.potential)
+        resonance = Resonance(n1,n2,DDF.potential)
+        @test DistributionFunction(EL, DDF) ≈ 0.12176405 atol=1e-6
+        @test gradient(EL, DDF)[1] ≈ -0.49187175 atol=1e-6
+        @test gradient(EL, DDF)[2] ≈ 0.00976138 atol=1e-6
+    end
 end
