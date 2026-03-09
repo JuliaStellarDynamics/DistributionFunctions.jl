@@ -4,7 +4,7 @@ ToomreDisc([potential])
 
 Toomre disc distribution function.
 """
-function ToomreDisc(;potential::ToomrePotential=ToomrePotential(),mM::Int64=1,G::Float64=1.0)
+function ToomreDisc(;potential::ToomrePotential=NumericalToomre(),mM::Int64=1,G::Float64=1.0)
     return ToomreDisc(potential,mM,G)
 end
 
