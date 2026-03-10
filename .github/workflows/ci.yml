@@ -25,7 +25,6 @@ jobs:
               using Pkg
               Pkg.develop(PackageSpec(path="/home/runner/work/DistributionFunctions.jl/DistributionFunctions.jl"))'
             julia --project=df test/runtests.jl
-            pytest --cov --cov-branch --cov-report=xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
