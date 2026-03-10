@@ -9,11 +9,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v1
         with:
-          version: 1.9
+          version: 1.10
           arch: x64
       - name: instantiate environment, run tests
         run: |
             pwd
+            pip install pytest pytest-cov
             julia --project=df -e '
               using Pkg
               Pkg.add("BenchmarkTools")
@@ -25,8 +26,9 @@ jobs:
               using Pkg
               Pkg.develop(PackageSpec(path="/home/runner/work/DistributionFunctions.jl/DistributionFunctions.jl"))'
             julia --project=df test/runtests.jl
+            pytest --cov --cov-branch --cov-report=xml
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
