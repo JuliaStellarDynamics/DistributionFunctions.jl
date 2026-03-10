@@ -14,7 +14,6 @@ jobs:
       - name: instantiate environment, run tests
         run: |
             pwd
-            pip install pytest pytest-cov
             julia --project=df -e '
               using Pkg
               Pkg.add("BenchmarkTools")
