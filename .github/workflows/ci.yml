@@ -14,17 +14,17 @@ jobs:
       - name: instantiate environment, run tests
         run: |
             pwd
-            julia --project=. -e '
+            julia --project=df -e '
               using Pkg
               Pkg.add("BenchmarkTools")
               Pkg.add("Test")
               Pkg.add(url="https://github.com/JuliaStellarDynamics/OrbitalElements.jl.git")
               Pkg.add(url="https://github.com/JuliaStellarDynamics/DistributionFunctions.jl.git")'
             ls
-            julia --project=. -e '
+            julia --project=df -e '
               using Pkg
               Pkg.develop(PackageSpec(path=pwd()))'
-            julia --project=. test/runtests.jl
+            julia --project=df test/runtests.jl
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
