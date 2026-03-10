@@ -24,7 +24,7 @@ jobs:
             julia --project=df -e '
               using Pkg
               Pkg.develop(PackageSpec(path=pwd()))'
-            julia --project=df test/runtests.jl
+            julia --project=df --code-coverage=user test/runtests.jl
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
