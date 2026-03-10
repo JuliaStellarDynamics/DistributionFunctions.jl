@@ -14,19 +14,17 @@ jobs:
       - name: instantiate environment, run tests
         run: |
             pwd
-            pip install pytest pytest-cov
-            julia --project=df -e '
+            julia --project=. -e '
               using Pkg
               Pkg.add("BenchmarkTools")
               Pkg.add("Test")
               Pkg.add(url="https://github.com/JuliaStellarDynamics/OrbitalElements.jl.git")
               Pkg.add(url="https://github.com/JuliaStellarDynamics/DistributionFunctions.jl.git")'
             ls
-            julia --project=df -e '
+            julia --project=. -e '
               using Pkg
-              Pkg.develop(PackageSpec(path="/home/runner/work/DistributionFunctions.jl/DistributionFunctions.jl"))'
-            julia --project=df test/runtests.jl
-            pytest --cov --cov-branch --cov-report=xml
+              Pkg.develop(PackageSpec(path=pwd()))'
+            julia --project=. test/runtests.jl
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
