@@ -22,6 +22,7 @@ struct MestelDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: MestelPotentialDF
     potential::modelT # potential model
     q::qT                   # velocity dispersion parameter
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+    isOdd::Bool
 end
 
 struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
@@ -31,7 +32,8 @@ struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     Rin::Float64               # inner taper radius
     μ::Int64                   # outer taper
     Rout::Float64              # outer taper radius
-    G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)   
+    G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)  
+    isOdd::Bool 
 end
 
 struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
@@ -43,13 +45,23 @@ struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     Rout::Float64              # outer taper radius
     Rmax::Float64              # no particles beyond Rmax
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+    isOdd::Bool
 end
 
 struct ToomreDisc{modelT<:ToomrePotential} <: ToomrePotentialDF
     potential::modelT # potential model
     mM::Int64            # Miyamoto index
     G::Float64        # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+    isOdd::Bool
 end
+
+struct ToomreDiscOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
+    potential::modelT # potential model
+    mM::Int64            # Miyamoto index
+    G::Float64        # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+    isOdd::Bool
+end
+
 
 #####
 #
@@ -113,7 +125,7 @@ end
 
 #####
 #
-#   The Miyamoto DFs for Kuzmin-Toomre disc 
+#   The Miyamoto DFs (even component) for Kuzmin-Toomre disc 
 #
 #####
 
@@ -172,8 +184,6 @@ function MiyamotodFdE(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
     return dFdE
 end
 
-# TODO : Check following expressions
-
 """
     MiyamotodFdL(EL::Tuple{Float64,Float64},df::ToomreDisc)
 Miyamoto DF derivative w.r.t. L.
@@ -199,6 +209,107 @@ function MiyamotodFdL(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
         * _₂F₁(-1-2mM, 1-mM, 3/2, tL^2/(2*tE))
         / pi^2
     )
+    dFdL = dtFdtL / L0
+
+    return dFdL
+end
+
+
+
+
+#####
+#
+#   The Miyamoto DFs (odd component) for Kuzmin-Toomre disc 
+#
+#####
+
+"""
+    MiyamotoDistributionOdd(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Miyamoto distribution function (odd component) .
+"""
+function MiyamotoDistributionOdd(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
+
+    E,L = EL
+    mM = df.mM
+
+    M = df.potential.M
+    E0 = energy_scale(df.potential)
+    L0 = momentum_scale(df.potential)
+
+    tE = E/E0
+    tL = L/L0
+
+    return M/(L0^2) * (
+        (4mM + 7) * (4mM + 9)
+        * (tE)^(2mM + 5/2) * tL
+        * _₂F₁(-mM, -5/2-2mM, 3/2, tL^2/(2*tE))
+        / (16 * pi^2)
+    )
+end
+
+"""
+    MiyamotodFdEOdd(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Miyamoto DF derivative w.r.t. E (odd component) .
+"""
+function MiyamotodFdEOdd(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
+
+    E,L = EL
+    mM = df.mM
+
+    M = df.potential.M
+    E0 = energy_scale(df.potential)
+    L0 = momentum_scale(df.potential)
+
+    tE = E/E0
+    tL = L/L0
+
+    dtFdtE = M/(L0^2) * (
+        tE^(3/2 + 2mM)
+        * tL
+        * (5 + 4mM)
+        * (7 + 4mM)
+        * (9 + 4mM)
+        * _₂F₁(-mM, -3/2-2mM, 3/2, tL^2/(2*tE))
+        / (32*pi^2)
+    )
+    dFdE = dtFdtE / E0
+
+    return dFdE
+end
+
+"""
+    MiyamotodFdLOdd(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Miyamoto DF derivative w.r.t. L (odd component) .
+"""
+function MiyamotodFdLOdd(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
+
+    E,L = EL
+    mM = df.mM
+
+    M = df.potential.M
+    E0 = energy_scale(df.potential)
+    L0 = momentum_scale(df.potential)
+
+    tE = E/E0
+    tL = L/L0
+
+    if (mM != 0)
+        dtFdtL =  M/(L0^2) * (
+            tE^(2mM+3/2)
+            * (7 + 4mM)
+            * (9 + 4mM)
+            * ( 
+                tL^2 * mM * (5 + 4mM) * _₂F₁(-3/2-2mM, 1-mM, 5/2, tL^2/(2*tE))
+                + 3 * tE * _₂F₁(-mM, -5/2-2mM, 3/2, tL^2/(2*tE))
+            )
+            / (48*pi^2)
+        )
+    else
+        dtFdtL =  63 * M/(L0^2) * (
+            tE^(2mM+5/2)
+            / (16*pi^2)
+        )
+    end
     dFdL = dtFdtL / L0
 
     return dFdL
