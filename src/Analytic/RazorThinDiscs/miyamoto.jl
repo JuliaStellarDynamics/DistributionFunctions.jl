@@ -27,7 +27,7 @@ end
 
 """
     dFdL(EL::Tuple{Float64,Float64},df::ToomreDisc)
-Toomre DF derivative w.r.t. E.
+Toomre DF derivative w.r.t. L.
 """
 function DFDL(EL::Tuple{Float64,Float64},df::ToomreDisc)::Float64
     return MiyamotodFdL(EL,df)
@@ -38,9 +38,9 @@ end
 
 
 """
-ToomreDisc([potential])
+ToomreDiscOdd([potential])
 
-Toomre disc distribution function.
+Toomre disc distribution function (odd component).
 """
 function ToomreDiscOdd(;potential::ToomrePotential=NumericalToomre(),mM::Int64=1,G::Float64=1.0)
     return ToomreDiscOdd(potential,mM,G,true)
@@ -48,7 +48,7 @@ end
 
 """
     ToomreDistribution(EL::Tuple{Float64,Float64},df::ToomreDisc)
-Toomre distribution function.
+Toomre distribution function (odd component).
 """
 function DistributionFunction(EL::Tuple{Float64,Float64},df::ToomreDiscOdd)::Float64
 
@@ -57,7 +57,7 @@ end
 
 """
     dFdE(EL::Tuple{Float64,Float64},df::ToomreDisc)
-Toomre DF derivative w.r.t. E.
+Toomre DF derivative w.r.t. E (odd component).
 """
 function DFDE(EL::Tuple{Float64,Float64},df::ToomreDiscOdd)::Float64
     return MiyamotodFdEOdd(EL,df)
@@ -65,7 +65,7 @@ end
 
 """
     dFdL(EL::Tuple{Float64,Float64},df::ToomreDisc)
-Toomre DF derivative w.r.t. E.
+Toomre DF derivative w.r.t. L (odd component).
 """
 function DFDL(EL::Tuple{Float64,Float64},df::ToomreDiscOdd)::Float64
     return MiyamotodFdLOdd(EL,df)
