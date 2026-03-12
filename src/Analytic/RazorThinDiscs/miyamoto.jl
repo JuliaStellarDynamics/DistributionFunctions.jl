@@ -1,58 +1,34 @@
-using HypergeometricFunctions
 
-#####
-#
-#   The Miyamoto DFs for Kuzmin-Toomre disc 
-#
-#####
 """
-    miyamoto_distribution(E, L[, mM])
+ToomreDisc([potential])
 
-Miyamoto distribution function for Kuzmin-Toomre disc.
+Toomre disc distribution function.
 """
-function DistributionFunction(E::Float64, L::Float64; mM::Int64=1)
-    return (
-        (2mM + 3)
-        * (-E)^(2mM + 2)
-        * _₂F₁(-mM, -2-2mM, 1/2, -L^2/(2E))
-        / (2 * pi^2)
-    )
+function ToomreDisc(;potential::ToomrePotential=NumericalToomre(),mM::Int64=1,G::Float64=1.0)
+    return ToomreDisc(potential,mM,G)
 end
 
 """
-    miyamoto_dFdE(E, L[, mM])
-
-Miyamoto distribution derivative w.r.t. energy.
+    ToomreDistribution(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Toomre distribution function.
 """
-function DFDE(E::Float64, L::Float64; mM::Int64=1)
-    return (
-        E^(2mM)
-        * (1 + mM)
-        * (3 + 2mM)
-        * ( 
-            L^2 * mM * _₂F₁(-1-2mM, 1-mM, 3/2, -L^2/(2E))
-            + E * _₂F₁(-mM, -2-2mM, 1/2, -L^2/(2E))
-        )
-        / pi^2
-    )
+function DistributionFunction(EL::Tuple{Float64,Float64},df::ToomreDisc)::Float64
+
+    return MiyamotoDistribution(EL,df)
 end
 
 """
-    miyamoto_dFdL(E, L[, mM])
-
-Miyamoto distribution derivative w.r.t. angular momentum.
+    dFdE(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Toomre DF derivative w.r.t. E.
 """
-function DFDL(E::Float64, L::Float64; mM::Int64=1)
-
-    return -(
-        2
-        * E^(1 + 2mM)
-        * L
-        * mM
-        * (1 + mM)
-        * (3 + 2mM)
-        * _₂F₁(-1-2mM, 1-mM, 3/2, -L^2/(2E))
-        / pi^2
-    )
+function DFDE(EL::Tuple{Float64,Float64},df::ToomreDisc)::Float64
+    return MiyamotodFdE(EL,df)
 end
 
+"""
+    dFdL(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Toomre DF derivative w.r.t. E.
+"""
+function DFDL(EL::Tuple{Float64,Float64},df::ToomreDisc)::Float64
+    return MiyamotodFdL(EL,df)
+end

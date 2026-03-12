@@ -1,5 +1,6 @@
 
 using SpecialFunctions # for gamma function
+using HypergeometricFunctions
 
 # @IMPROVE is there a better way to do this?
 const IntorFloat = Union{Int64,Float64}
@@ -11,6 +12,7 @@ const IntorFloat = Union{Int64,Float64}
 abstract type DiscDF <: DiscEnergyAngularMomentumDF end
 abstract type MestelPotentialDF <: DiscDF end
 abstract type ZangDF <: MestelPotentialDF end
+abstract type ToomrePotentialDF <: DiscDF end
 
 const MestelPotentials = Union{MestelPotential,TaperedMestel}
 
@@ -42,6 +44,18 @@ struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     Rmax::Float64              # no particles beyond Rmax
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
 end
+
+struct ToomreDisc{modelT<:ToomrePotential} <: ToomrePotentialDF
+    potential::modelT # potential model
+    mM::Int64            # Miyamoto index
+    G::Float64        # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+end
+
+#####
+#
+#   The Mestel functions
+#
+#####
 
 """
     σMestelDistribution([R0, V0, q])
@@ -97,7 +111,101 @@ function MesteldFdL(EL::Tuple{Float64,Float64},df::MestelPotentialDF)::Float64
     return C * df.q * (L)^(df.q-1) * exp(-E / (σ^2))
 end
 
+#####
+#
+#   The Miyamoto DFs for Kuzmin-Toomre disc 
+#
+#####
+
+"""
+    MiyamotoDistribution(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Miyamoto distribution function.
+"""
+function MiyamotoDistribution(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
+
+    E,L = EL
+    mM = df.mM
+
+    M = df.potential.M
+    E0 = energy_scale(df.potential)
+    L0 = momentum_scale(df.potential)
+
+    tE = E/E0
+    tL = L/L0
+
+    return M/(L0^2) * (
+        (2mM + 3)
+        * (tE)^(2mM + 2)
+        * _₂F₁(-mM, -2-2mM, 1/2, tL^2/(2*tE))
+        / (4 * pi^2)
+    )
+end
+
+"""
+    MiyamotodFdE(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Miyamoto DF derivative w.r.t. E.
+"""
+function MiyamotodFdE(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
+
+    E,L = EL
+    mM = df.mM
+
+    M = df.potential.M
+    E0 = energy_scale(df.potential)
+    L0 = momentum_scale(df.potential)
+
+    tE = E/E0
+    tL = L/L0
+
+    dtFdtE = - M/(L0^2) * (
+        tE^(2mM)
+        * (1 + mM)
+        * (3 + 2mM)
+        * ( 
+            tL^2 * mM * _₂F₁(-1-2mM, 1-mM, 3/2, tL^2/(2*tE))
+            - tE * _₂F₁(-mM, -2-2mM, 1/2, tL^2/(2*tE))
+        )
+        / (2*pi^2)
+    )
+    dFdE = dtFdtE / E0
+
+    return dFdE
+end
+
+# TODO : Check following expressions
+
+"""
+    MiyamotodFdL(EL::Tuple{Float64,Float64},df::ToomreDisc)
+Miyamoto DF derivative w.r.t. L.
+"""
+function MiyamotodFdL(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
+
+    E,L = EL
+    mM = df.mM
+
+    M = df.potential.M
+    E0 = energy_scale(df.potential)
+    L0 = momentum_scale(df.potential)
+
+    tE = E/E0
+    tL = L/L0
+
+    dtFdtL = M/(L0^2) * (
+        tE^(1 + 2mM)
+        * tL
+        * mM
+        * (1 + mM)
+        * (3 + 2mM)
+        * _₂F₁(-1-2mM, 1-mM, 3/2, tL^2/(2*tE))
+        / pi^2
+    )
+    dFdL = dtFdtL / L0
+
+    return dFdL
+end
+
+
 include("mestel.jl")
 include("zang.jl")
 include("truncatedzang.jl")
-#include("miyamoto.jl")
+include("miyamoto.jl")

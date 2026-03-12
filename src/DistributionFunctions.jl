@@ -23,6 +23,7 @@ export IsochroneDF,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIs
 
 # discs
 export MestelDisc,ZangDisc,TruncatedZangDisc
+export ToomreDisc
 
 
 #####################################
