@@ -9,8 +9,8 @@ TruncatedZangDisc([potential])
 
 Zang disc distribution function.
 """
-function TruncatedZangDisc(;potential::MestelPotential=MestelPotential(),q::IntorFloat=11.44,ν::Int64=4,Rin::Float64=1.0,μ::Int64=5,Rout::Float64=11.5,Rmax::Float64=20.,G::Float64=1.0)
-    return TruncatedZangDisc(potential,q,ν,Rin,μ,Rout,Rmax,G,false)
+function TruncatedZangDisc(;potential::MestelPotentials=MestelPotential(),q::IntorFloat=11.44,ν::Int64=4,Rin::Float64=1.0,μ::Int64=5,Rout::Float64=11.5,Rmax::Float64=20.,G::Float64=1.0,ξ::Float64=1.0)
+    return TruncatedZangDisc(potential,q,ν,Rin,μ,Rout,Rmax,G,false,ξ)
 end
 
 

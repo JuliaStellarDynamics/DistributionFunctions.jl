@@ -46,19 +46,20 @@ struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     Rmax::Float64              # no particles beyond Rmax
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
     isOdd::Bool
+    ξ::Float64                # Self-gravity fraction
 end
 
 struct ToomreDisc{modelT<:ToomrePotential} <: ToomrePotentialDF
     potential::modelT # potential model
     mM::Int64            # Miyamoto index
-    G::Float64        # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+    G::Float64        # gravitational constant
     isOdd::Bool
 end
 
 struct ToomreDiscOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
     potential::modelT # potential model
     mM::Int64            # Miyamoto index
-    G::Float64        # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
+    G::Float64        # gravitational constant
     isOdd::Bool
 end
 
