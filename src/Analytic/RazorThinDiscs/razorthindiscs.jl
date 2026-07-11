@@ -109,7 +109,7 @@ Mestel DF derivative w.r.t. E.
 function MesteldFdE(EL::Tuple{Float64,Float64},df::MestelPotentialDF)::Float64
 
     σ = σMestelDistribution(df)
-    return - DistributionFunction(EL,df) / (σ^2)
+    return - MestelDistribution(EL,df) / (σ^2)
 end
 
 """

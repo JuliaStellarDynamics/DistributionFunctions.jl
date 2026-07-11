@@ -5,7 +5,7 @@ MestelDisc([potential])
 
 Mestel disc distribution function.
 """
-function MestelDisc(;potential::MestelPotential=MestelPotential(),q::IntorFloat=11.44,G::Float64=1.0)
+function MestelDisc(;potential::MestelPotentials=MestelPotential(),q::IntorFloat=11.44,G::Float64=1.0)
     return MestelDisc(potential,q,G,false)
 end
 

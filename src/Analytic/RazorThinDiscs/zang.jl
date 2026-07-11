@@ -4,7 +4,7 @@ ZangDisc([potential])
 
 Zang disc distribution function.
 """
-function ZangDisc(;potential::MestelPotential=MestelPotential(),q::IntorFloat=11.44,ν::Int64=4,Rin::Float64=1.0,μ::Int64=5,Rout::Float64=11.5,G::Float64=1.0)
+function ZangDisc(;potential::MestelPotentials=MestelPotential(),q::IntorFloat=11.44,ν::Int64=4,Rin::Float64=1.0,μ::Int64=5,Rout::Float64=11.5,G::Float64=1.0)
     return ZangDisc(potential,q,ν,Rin,μ,Rout,G,false)
 end
 
