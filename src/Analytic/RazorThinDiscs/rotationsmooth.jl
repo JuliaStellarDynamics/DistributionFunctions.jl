@@ -13,9 +13,9 @@ end
 
 
 function _gRot(x::Float64)
-    if (x <= 1.0)
+    if (x <= -1.0)
         return -1.0
-    elseif (x < 1)
+    elseif (x < 1.0)
         return x * (1.5 - 0.5*x*x)
     else
         return 1.0
