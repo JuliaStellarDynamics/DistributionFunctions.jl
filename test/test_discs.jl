@@ -10,6 +10,7 @@ OEP = OrbitalElements.OrbitalParameters(rmin=rmin)
     @testset "mestel" begin
         DDF = MestelDisc()
         EL = EL_from_ae(a,e,DDF.potential,OEP)
+        print(EL)
         ΩΩ = frequencies_from_ae(a,e,DDF.potential,OEP)
         resonance = Resonance(n1,n2,DDF.potential,OEP)
         @test DistributionFunction(EL, DDF) ≈ 4.397057 atol=1e-6
@@ -19,6 +20,7 @@ OEP = OrbitalElements.OrbitalParameters(rmin=rmin)
     @testset "zang" begin
         DDF = ZangDisc()
         EL = EL_from_ae(a,e,DDF.potential,OEP)
+        println(EL)
         ΩΩ = frequencies_from_ae(a,e,DDF.potential,OEP)
         resonance = Resonance(n1,n2,DDF.potential,OEP)
         @test DistributionFunction(EL, DDF) ≈ 0.0004396617345 atol=1e-6
