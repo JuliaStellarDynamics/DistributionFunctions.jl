@@ -5,7 +5,7 @@ ToomreDiscSmoothOdd([potential])
 Toomre disc distribution function.
 """
 function ToomreDiscSmoothOdd(;df_even::ToomreDisc=ToomreDisc(),a::Float64=1.0,Lc::Float64=1.0)
-    @assert (0.0 < a < 1.0) "ERROR : a should be strictly between 0.0 and 1.0"
+    @assert (0.0 < a) "ERROR : a should be strictly greater than 0.0"
     potential = df_even.potential
     G = df_even.G
     return ToomreDiscSmoothOdd(potential,df_even,a,Lc,G,true)
