@@ -46,7 +46,8 @@ function DistributionFunction(EL::Tuple{Float64,Float64},df::ToomreDiscSmoothOdd
     df_even = df.df_even
     Lc = df.Lc
     a = df.a
-    x = Lz/Lc
+    E,L = EL
+    x = L/Lc
     return DistributionFunction(EL,df_even) * _gRot_a(x, a)
 end
 
@@ -58,7 +59,8 @@ function DFDE(EL::Tuple{Float64,Float64},df::ToomreDiscSmoothOdd)::Float64
     df_even = df.df_even
     Lc = df.Lc
     a = df.a
-    x = Lz/Lc
+    E,L = EL
+    x = L/Lc
     return DFDE(EL,df_even) * _gRot_a(x, a)
 end
 
@@ -70,6 +72,7 @@ function DFDL(EL::Tuple{Float64,Float64},df::ToomreDiscSmoothOdd)::Float64
     df_even = df.df_even
     Lc = df.Lc
     a = df.a
-    x = Lz/Lc
+    E,L = EL
+    x = L/Lc
     return DFDL(EL,df_even) * _gRot_a(x, a) + DistributionFunction(EL,df_even) * _d_gRot_a_dx(x, a)/Lc
 end
