@@ -50,16 +50,25 @@ struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
 end
 
 struct ToomreDisc{modelT<:ToomrePotential} <: ToomrePotentialDF
-    potential::modelT # potential model
-    mM::Int64            # Miyamoto index
-    G::Float64        # gravitational constant
+    potential::modelT       # potential model
+    mM::Int64               # Miyamoto index
+    G::Float64              # gravitational constant
     isOdd::Bool
 end
 
 struct ToomreDiscOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
-    potential::modelT # potential model
-    mM::Int64            # Miyamoto index
-    G::Float64        # gravitational constant
+    potential::modelT       # potential model
+    mM::Int64               # Miyamoto index
+    G::Float64              # gravitational constant
+    isOdd::Bool
+end
+
+struct ToomreDiscSmoothOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
+    potential::modelT       # potential model
+    df_even::ToomreDisc     # Even component of the DF
+    a::Float64              # Smoothing index
+    Lc::Float64             # Cutoff angular momentum
+    G::Float64              # gravitational constant
     isOdd::Bool
 end
 
@@ -321,3 +330,4 @@ include("mestel.jl")
 include("zang.jl")
 include("truncatedzang.jl")
 include("miyamoto.jl")
+include("rotationsmooth.jl")
