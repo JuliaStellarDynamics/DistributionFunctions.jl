@@ -1,33 +1,18 @@
-name: CI
-on:
-  - push
-
+name: coverage
+on: [push, pull_request]
 jobs:
-  CI:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Julia 1.12.0
+        uses: julia-actions/setup-julia@v1
         with:
-          version: '1.10'
-          arch: x64
-      - name: instantiate environment, run tests
-        run: |
-            pwd
-            julia --project=df -e '
-              using Pkg
-              Pkg.add("BenchmarkTools")
-              Pkg.add("Test")
-              Pkg.add(url="https://github.com/JuliaStellarDynamics/OrbitalElements.jl.git")
-              Pkg.add(url="https://github.com/JuliaStellarDynamics/DistributionFunctions.jl.git")'
-            ls
-            julia --project=df -e '
-              using Pkg
-              Pkg.develop(PackageSpec(path=pwd()))'
-            julia --project=df --code-coverage=user test/runtests.jl
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-
+          version: "1.12.0"
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-runtest@v1
+      - uses: julia-actions/julia-processcoverage@v1
+      - uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}

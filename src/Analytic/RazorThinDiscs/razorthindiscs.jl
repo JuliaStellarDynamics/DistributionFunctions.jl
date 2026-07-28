@@ -118,7 +118,7 @@ end
 #####
 
 """
-    MiyamotoDistribution(EL::Tuple{Float64,Float64},df::ToomreDisc)
+    MiyamotoDistribution(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)
 Miyamoto distribution function.
 """
 function MiyamotoDistribution(EL::Tuple{Float64,Float64},df::ToomrePotentialDF)::Float64
