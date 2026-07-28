@@ -27,7 +27,7 @@ end
 
 """
     dFdL(EL::Tuple{Float64,Float64},df::ToomreDisc)
-Toomre DF derivative w.r.t. E.
+Toomre DF derivative w.r.t. L.
 """
 function DFDL(EL::Tuple{Float64,Float64},df::ToomreDisc)::Float64
     return MiyamotodFdL(EL,df)
