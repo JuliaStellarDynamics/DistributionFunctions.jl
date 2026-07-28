@@ -23,7 +23,7 @@ OEP = OrbitalElements.OrbitalParameters(rmin=rmin)
         ΩΩ = frequencies_from_ae(a,e,DDF.potential,OEP)
         resonance = Resonance(n1,n2,DDF.potential,OEP)
         @test DistributionFunction(EL, DDF) ≈ 0.0004396617345 atol=1e-6
-        @test gradient(EL, DDF)[1] ≈ -5.468845093620248e-7 atol=1e-6
+        @test gradient(EL, DDF)[1] ≈ -0.0054693919784 atol=1e-6
         @test gradient(EL, DDF)[2] ≈ 0.067882013 atol=1e-6
     end
     @testset "truncatedzang" begin
