@@ -24,6 +24,7 @@ export IsochroneDF,IsotropicIsochrone,OsipkovMerrittIsochroneEL,OsipkovMerrittIs
 # discs
 export MestelDisc,ZangDisc,TruncatedZangDisc
 export ToomreDisc, ToomreDiscOdd, ToomreDiscSmoothOdd
+export ExpShuDisk, ExpShuDiskEven, ExpShuDiskOdd
 
 
 #####################################
