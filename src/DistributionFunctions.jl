@@ -26,6 +26,8 @@ export MestelDisc,ZangDisc,TruncatedZangDisc
 export ToomreDisc, ToomreDiscOdd, ToomreDiscSmoothOdd
 export ExpShuDisk, ExpShuDiskEven, ExpShuDiskOdd
 
+export TruncatedZangDiscEven, TruncatedZangDiscOdd
+
 
 #####################################
 # Includes
