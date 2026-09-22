@@ -8,7 +8,7 @@ function ToomreDiscSmoothOdd(;df_even::ToomreDisc=ToomreDisc(),a::Float64=1.0,Lc
     @assert (0.0 < a) "ERROR : a should be strictly greater than 0.0"
     potential = df_even.potential
     G = df_even.G
-    return ToomreDiscSmoothOdd(potential,df_even,a,Lc,G,true)
+    return ToomreDiscSmoothOdd(potential,df_even,a,Lc,G,true,false)
 end
 
 

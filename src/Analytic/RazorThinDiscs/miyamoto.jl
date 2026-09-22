@@ -5,7 +5,7 @@ ToomreDisc([potential])
 Toomre disc distribution function.
 """
 function ToomreDisc(;potential::ToomrePotential=NumericalToomre(),mM::Int64=1,G::Float64=1.0)
-    return ToomreDisc(potential,mM,G,false)
+    return ToomreDisc(potential,mM,G,false,false)
 end
 
 """
@@ -43,7 +43,7 @@ ToomreDiscOdd([potential])
 Toomre disc distribution function (odd component).
 """
 function ToomreDiscOdd(;potential::ToomrePotential=NumericalToomre(),mM::Int64=1,G::Float64=1.0)
-    return ToomreDiscOdd(potential,mM,G,true)
+    return ToomreDiscOdd(potential,mM,G,true,false)
 end
 
 """

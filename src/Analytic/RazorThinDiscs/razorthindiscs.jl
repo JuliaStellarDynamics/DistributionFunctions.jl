@@ -23,6 +23,7 @@ struct MestelDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: MestelPotentialDF
     q::qT                   # velocity dispersion parameter
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
     isOdd::Bool
+    isVanishing::Bool
 end
 
 struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
@@ -34,6 +35,7 @@ struct ZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     Rout::Float64              # outer taper radius
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)  
     isOdd::Bool 
+    isVanishing::Bool
 end
 
 struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
@@ -47,6 +49,7 @@ struct TruncatedZangDisc{modelT<:MestelPotentials,qT<:IntorFloat} <: ZangDF
     G::Float64                      # gravitational constant (not in MestelPotential or TaperedMestel, so needed here)
     isOdd::Bool
     ξ::Float64                # Self-gravity fraction
+    isVanishing::Bool
 end
 
 struct ToomreDisc{modelT<:ToomrePotential} <: ToomrePotentialDF
@@ -54,6 +57,7 @@ struct ToomreDisc{modelT<:ToomrePotential} <: ToomrePotentialDF
     mM::Int64               # Miyamoto index
     G::Float64              # gravitational constant
     isOdd::Bool
+    isVanishing::Bool
 end
 
 struct ToomreDiscOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
@@ -61,6 +65,7 @@ struct ToomreDiscOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
     mM::Int64               # Miyamoto index
     G::Float64              # gravitational constant
     isOdd::Bool
+    isVanishing::Bool
 end
 
 struct ToomreDiscSmoothOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
@@ -70,6 +75,7 @@ struct ToomreDiscSmoothOdd{modelT<:ToomrePotential} <: ToomrePotentialDF
     Lc::Float64             # Cutoff angular momentum
     G::Float64              # gravitational constant
     isOdd::Bool
+    isVanishing::Bool
 end
 
 
