@@ -64,7 +64,7 @@ end
 #####
 
 # Interpolation table
-const tab_ck = [
+const tab_ck_shu = [
     2.7515500106E+00,
     1.5649678643E+00,
     1.4106149953E+00,
